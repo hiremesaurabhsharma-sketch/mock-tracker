@@ -46,8 +46,8 @@ export default function MarksForm({ onAddMark }) {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const inputClass = "w-full p-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all placeholder:text-slate-400";
-  const labelClass = "block text-xs font-semibold text-slate-500 mb-1.5 ml-1";
+  const inputClass = "w-full p-3 rounded-xl border border-slate-200 bg-[#f8fafc80] text-slate-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all placeholder:text-slate-400";
+  const labelClass = "block text-sm font-bold text-slate-700 mb-1.5 ml-1";
 
   return (
     <div className="relative overflow-hidden bg-white border border-slate-100 p-8 rounded-[2rem] shadow-[0_4px_20px_rgb(0,0,0,0.03)] group">
@@ -57,7 +57,7 @@ export default function MarksForm({ onAddMark }) {
         className="absolute inset-0 z-0 opacity-50"
         style={{ backgroundImage: "radial-gradient(circle, #e2e8f0 1.5px, transparent 1.5px)", backgroundSize: "24px 24px" }}
       ></div>
-      <div className="absolute bottom-[-20%] left-[-10%] w-[30rem] h-[30rem] bg-cyan-50/60 rounded-full mix-blend-multiply blur-3xl z-0 pointer-events-none"></div>
+      <div className="absolute bottom-[-20%] left-[-10%] w-[30rem] h-[30rem] bg-cyan-50 opacity-60 rounded-full mix-blend-multiply blur-3xl z-0 pointer-events-none"></div>
 
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-8">

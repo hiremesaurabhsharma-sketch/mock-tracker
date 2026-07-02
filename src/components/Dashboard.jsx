@@ -92,8 +92,8 @@ export default function Dashboard({ currentUser, onLogout }) {
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>
         </div>
         {/* Very large faded blobs just to give a tiny bit of depth */}
-        <div className="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-indigo-50/50 rounded-full mix-blend-multiply blur-3xl z-0"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[30rem] h-[30rem] bg-blue-50/50 rounded-full mix-blend-multiply blur-3xl z-0"></div>
+        <div className="absolute top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-indigo-50 opacity-50 rounded-full mix-blend-multiply blur-3xl z-0"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[30rem] h-[30rem] bg-blue-50 opacity-50 rounded-full mix-blend-multiply blur-3xl z-0"></div>
       </div>
 
       <div className="max-w-6xl mx-auto space-y-8 relative z-10">

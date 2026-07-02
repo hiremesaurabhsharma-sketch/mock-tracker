@@ -53,7 +53,7 @@ export default function MarksTable({ marks, onRemoveMark }) {
                 return (
                   <tr 
                     key={mark.id} 
-                    className="border-b border-slate-50 hover:bg-blue-50/50 transition-colors bg-white"
+                    className="border-b border-slate-50 hover:bg-blue-50 transition-colors bg-white"
                   >
                     <td className="p-5 text-sm font-medium text-slate-500">{mark.date}</td>
                     <td className="p-5">
@@ -103,7 +103,7 @@ export default function MarksTable({ marks, onRemoveMark }) {
 
       {/* Image Preview Modal (Hidden in Print) */}
       {previewImage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 print:hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0f172a66] backdrop-blur-sm p-4 print:hidden">
           <div className="relative max-w-5xl w-full bg-white border border-slate-200 rounded-[2rem] p-2 shadow-2xl">
             <button 
               onClick={() => setPreviewImage(null)} 

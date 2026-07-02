@@ -11,6 +11,8 @@ export default function MarksForm({ onAddMark }) {
   const [totalMarks, setTotalMarks] = useState(200);
   const [marksObtained, setMarksObtained] = useState("");
   const [screenshot, setScreenshot] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
   
   const [testDate, setTestDate] = useState(() => {
@@ -20,15 +22,43 @@ export default function MarksForm({ onAddMark }) {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => setScreenshot(reader.result);
       reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!testName || !marksObtained || !testDate) return;
+
+    let finalScreenshot = screenshot;
+
+    if (imageFile) {
+      setIsUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append('file', imageFile);
+
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          finalScreenshot = data.directImageUrl;
+        } else {
+          console.error("Upload failed", data.error);
+          alert("Image upload failed! Using local preview instead.");
+        }
+      } catch (err) {
+        console.error("Upload error", err);
+        alert("Network error during upload! Using local preview instead.");
+      }
+      setIsUploading(false);
+    }
 
     onAddMark({
       id: Date.now().toString(),
@@ -37,12 +67,13 @@ export default function MarksForm({ onAddMark }) {
       totalMarks: Number(totalMarks),
       marksObtained: Number(marksObtained),
       date: testDate,
-      screenshot: screenshot || null,
+      screenshot: finalScreenshot || null,
     });
 
     setTestName("");
     setMarksObtained("");
     setScreenshot(null);
+    setImageFile(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -165,6 +196,7 @@ export default function MarksForm({ onAddMark }) {
                   onClick={(e) => {
                     e.preventDefault();
                     setScreenshot(null);
+                    setImageFile(null);
                     if (fileInputRef.current) fileInputRef.current.value = "";
                   }}
                   className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 shadow-lg"
@@ -178,11 +210,16 @@ export default function MarksForm({ onAddMark }) {
           <div className="lg:col-span-6 mt-2 flex justify-end">
             <button 
               type="submit"
-              className="group flex items-center gap-3 text-slate-900 font-bold hover:text-cyan-600 transition-colors"
+              disabled={isUploading}
+              className="group flex items-center gap-3 text-slate-900 font-bold hover:text-cyan-600 transition-colors disabled:opacity-50"
             >
-              <span className="text-sm">Scale Now</span>
-              <div className="bg-cyan-100 text-cyan-600 p-2.5 rounded-full group-hover:bg-cyan-200 transition-colors">
-                <ArrowRight size={18} />
+              <span className="text-sm">{isUploading ? 'Uploading...' : 'Scale Now'}</span>
+              <div className="bg-cyan-100 text-cyan-600 p-2.5 rounded-full group-hover:bg-cyan-200 transition-colors flex items-center justify-center">
+                {isUploading ? (
+                  <svg className="animate-spin h-5 w-5 text-cyan-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                ) : (
+                  <ArrowRight size={18} />
+                )}
               </div>
             </button>
           </div>

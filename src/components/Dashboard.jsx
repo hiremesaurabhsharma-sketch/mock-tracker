@@ -1,36 +1,57 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Download, GraduationCap, Filter, X, ArrowRight } from "lucide-react";
+import { Download, GraduationCap, Filter, X, ArrowRight, User, LogOut } from "lucide-react";
 import { get, set } from "idb-keyval";
 import MarksForm from "./MarksForm";
 import MarksTable from "./MarksTable";
 
-export default function Dashboard() {
+export default function Dashboard({ currentUser, onLogout }) {
   const [marks, setMarks] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [filterDate, setFilterDate] = useState("");
   const reportRef = useRef(null);
 
+  // Load marks for current user
   useEffect(() => {
-    get("mockMarks").then((saved) => {
-      if (saved) setMarks(saved);
+    if (!currentUser) return;
+    setIsLoaded(false);
+    get(`mockMarks_${currentUser}`).then((saved) => {
+      setMarks(saved || []);
       setIsLoaded(true);
     }).catch(e => {
       console.error("Failed to load marks", e);
+      setMarks([]);
       setIsLoaded(true);
     });
-  }, []);
+  }, [currentUser]);
 
   useEffect(() => {
-    if (isLoaded) {
-      set("mockMarks", marks).catch(e => console.error("Failed to save marks", e));
+    if (isLoaded && currentUser) {
+      set(`mockMarks_${currentUser}`, marks).catch(e => console.error("Failed to save marks", e));
     }
-  }, [marks, isLoaded]);
+  }, [marks, isLoaded, currentUser]);
 
   const handleAddMark = (newMark) => setMarks([newMark, ...marks]);
   const handleRemoveMark = (id) => setMarks(marks.filter(m => m.id !== id));
-  const handleDownloadPDF = () => window.print();
+  const handleDownloadPDF = async () => {
+    const element = reportRef.current;
+    if (!element) return;
+    try {
+      const html2pdf = (await import('html2pdf.js')).default;
+      const opt = {
+        margin: 0.5,
+        filename: `${currentUser}_Mock_Report.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    } catch (err) {
+      console.error("Failed to generate PDF", err);
+      window.print(); // Fallback
+    }
+  };
 
   const filteredMarks = filterDate ? marks.filter(m => m.date === filterDate) : marks;
 
@@ -159,10 +180,24 @@ export default function Dashboard() {
             </div>
           </div>
           
-          <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6 flex-shrink-0 w-full lg:w-auto animate-zoom-in anim-delay-300">
-            <span className="hidden lg:inline-block px-4 py-1.5 bg-white text-[#2563eb] text-[11px] font-black uppercase tracking-[0.15em] rounded-full border border-[#bfdbfe] shadow-sm whitespace-nowrap animate-pulse-continuous">
-              TOP TIER
-            </span>
+          <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 flex-shrink-0 w-full lg:w-auto animate-zoom-in anim-delay-300">
+            {/* Logged in user info */}
+            <div className="flex items-center gap-3 bg-white/90 backdrop-blur-md border border-[#e2e8f0] rounded-2xl p-1.5 shadow-sm print:hidden w-full sm:w-auto">
+              <div className="bg-slate-100 p-2 rounded-xl text-slate-600">
+                <User size={18} strokeWidth={2.5} />
+              </div>
+              <span className="font-bold text-slate-800 px-2 truncate max-w-[120px]">
+                {currentUser}
+              </span>
+              <button 
+                onClick={onLogout}
+                className="bg-red-50 text-red-600 p-2 rounded-xl hover:bg-red-100 transition-colors ml-1"
+                title="Logout"
+              >
+                <LogOut size={16} strokeWidth={2.5} />
+              </button>
+            </div>
+
             <button 
               onClick={handleDownloadPDF}
               disabled={filteredMarks.length === 0}

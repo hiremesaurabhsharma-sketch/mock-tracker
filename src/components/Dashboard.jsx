@@ -87,7 +87,7 @@ export default function Dashboard() {
           ></div>
           
           {/* Marvel Custom SVGs (Faces + Instruments) */}
-          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-40">
+          <div className="hidden sm:block absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-40">
             {/* 1. Spider-Man Face & Web */}
             <div className="absolute top-[-10%] left-[5%] animate-fade-in-out flex flex-col items-center gap-2 transform rotate-12" style={{ animationDelay: '0s', animationDuration: '6s' }}>
               <svg viewBox="0 0 100 100" className="w-24 h-24 drop-shadow-2xl">
@@ -149,11 +149,11 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col items-center sm:items-start">
-              <h1 className="text-4xl md:text-5xl font-black text-[#1d4ed8] tracking-tight leading-tight mb-2 animate-slide-up anim-delay-200">
+            <div className="flex flex-col items-center sm:items-start mt-2">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1d4ed8] tracking-tight leading-tight mb-2 animate-slide-up anim-delay-200">
                 SSC Skywalkers
               </h1>
-              <p className="text-[#64748b] font-medium text-sm sm:text-[16px] max-w-2xl leading-relaxed animate-slide-up anim-delay-300 italic">
+              <p className="text-[#64748b] font-medium text-xs sm:text-sm md:text-base max-w-2xl leading-relaxed animate-slide-up anim-delay-300 italic">
                 "Paseena bahane se hi itihaas likha jata hai. Har mock test tumhare struggle ka gawah hai, aur har score tumhari mehnat ka aaina."
               </p>
             </div>
@@ -166,7 +166,7 @@ export default function Dashboard() {
             <button 
               onClick={handleDownloadPDF}
               disabled={filteredMarks.length === 0}
-              className="group flex items-center justify-center gap-3 bg-transparent text-[#2563eb] font-bold hover:text-[#1d4ed8] transition-colors disabled:opacity-50 print:hidden"
+              className="hidden lg:flex group items-center justify-center gap-3 bg-transparent text-[#2563eb] font-bold hover:text-[#1d4ed8] transition-colors disabled:opacity-50 print:hidden"
             >
               <span className="text-sm uppercase tracking-wider font-extrabold whitespace-nowrap">Export Report</span>
               <div className="bg-[#2563eb] text-white p-3 rounded-full group-hover:bg-[#1d4ed8] transition-all shadow-md group-hover:shadow-lg group-hover:scale-105 group-disabled:bg-[#93c5fd]">
@@ -214,12 +214,12 @@ export default function Dashboard() {
             <MarksTable marks={filteredMarks} onRemoveMark={handleRemoveMark} />
 
             {/* Bottom Buttons */}
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-end gap-4 print:hidden">
+            <div className="mt-8 flex flex-wrap items-center justify-center sm:justify-end gap-4 print:hidden">
               <a
                 href="https://t.me/skywalkerssc"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#0088cc] hover:bg-[#0077b5] text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all hover:-translate-y-1"
+                className="flex items-center justify-center gap-2 bg-[#0088cc] hover:bg-[#0077b5] text-white px-6 py-3 rounded-xl font-bold shadow-md transition-all hover:-translate-y-1"
               >
                 <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.98 1.25-5.59 3.69-.53.36-1.01.54-1.44.53-.48-.01-1.38-.27-2.06-.49-.83-.27-1.48-.42-1.42-.89.03-.25.38-.51 1.07-.78 4.2-1.82 7-3.03 8.4-3.61 4-.17 4.83.16 4.99.16.11 0 .36.03.49.13.11.08.14.19.16.27-.01.05-.01.12-.02.21z"/>
@@ -229,7 +229,7 @@ export default function Dashboard() {
               <button 
                 onClick={handleDownloadPDF}
                 disabled={filteredMarks.length === 0}
-                className="w-full sm:w-auto group flex items-center justify-center gap-3 bg-white text-[#2563eb] border-2 border-[#2563eb] px-6 py-3 rounded-xl font-bold hover:bg-[#2563eb] hover:text-white transition-all disabled:opacity-50 shadow-sm hover:shadow-md hover:-translate-y-1"
+                className="group flex items-center justify-center gap-3 bg-white text-[#2563eb] border-2 border-[#2563eb] px-6 py-3 rounded-xl font-bold hover:bg-[#2563eb] hover:text-white transition-all disabled:opacity-50 shadow-sm hover:shadow-md hover:-translate-y-1"
               >
                 <Download size={20} strokeWidth={2.5} />
                 <span className="text-sm uppercase tracking-wider font-extrabold whitespace-nowrap">Export Report</span>
